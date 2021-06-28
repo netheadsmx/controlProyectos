@@ -23,8 +23,7 @@ class App extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $baseURL = 'http://ec2-18-117-154-172.us-east-2.compute.amazonaws.com/';
-
+	public $baseURL = 'http://ec2-3-128-168-246.us-east-2.compute.amazonaws.com/controlProyectos/';
 	/**
 	 * --------------------------------------------------------------------------
 	 * Index File

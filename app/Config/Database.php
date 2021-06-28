@@ -32,10 +32,10 @@ class Database extends Config
 	 */
 	public $default = [
 		'DSN'      => '',
-		'hostname' => 'localhost',
-		'username' => '',
-		'password' => '',
-		'database' => '',
+		'hostname' => 'ec2-3-128-168-246.us-east-2.compute.amazonaws.com',
+		'username' => 'netheads_demonio',
+		'password' => 's3cur3s0cNET123!@',
+		'database' => 'Admin_Proyectos',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,

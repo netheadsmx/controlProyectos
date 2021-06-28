@@ -6,6 +6,7 @@ use CodeIgniter\Validation\CreditCardRules;
 use CodeIgniter\Validation\FileRules;
 use CodeIgniter\Validation\FormatRules;
 use CodeIgniter\Validation\Rules;
+use CodeIgniter\Validation\CustomeRules;
 
 class Validation
 {
@@ -24,6 +25,7 @@ class Validation
 		FormatRules::class,
 		FileRules::class,
 		CreditCardRules::class,
+		CustomeRules::class,
 	];
 
 	/**
@@ -35,9 +37,12 @@ class Validation
 	public $templates = [
 		'list'   => 'CodeIgniter\Validation\Views\list',
 		'single' => 'CodeIgniter\Validation\Views\single',
+		'custom_error' => '_error_list'
 	];
 
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
+
+	
 }
