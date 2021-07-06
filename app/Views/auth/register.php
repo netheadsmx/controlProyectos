@@ -7,6 +7,9 @@
       <p class="login-box-msg">Iniciar el resgistro</p>
       <?php 
         $validation = \Config\Services::validation();
+        if (isset($error)) {
+          echo $error;
+        }
       ?>
       <form action="<?php echo site_url('auth/register/check_user_data')?>" method="post">
         <div class="input-group mb-3">
@@ -35,9 +38,10 @@
             </div>
           </div>
         </div>
+        <?php echo ($validation->showError('email','custom_error')); ?> 
         <div class="input-group mb-3">
           <select id="pais" name="pais" class="form-control">
-            <option value="0" selected>Selecciona un pais</option>
+            <option value="0" disabled selected>Selecciona un pais</option>
             <?php
               foreach($paises as $p)
               {
@@ -49,7 +53,7 @@
             </div>
           </select>
         </div>
-        <?php echo ($validation->showError('email','custom_error')); ?>
+        <?php echo ($validation->showError('pais','custom_error')); ?> 
         <div class="input-group mb-3">
           <input type="password" class="form-control" placeholder="Password" name="password">
           <div class="input-group-append">
