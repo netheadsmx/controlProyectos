@@ -34,12 +34,15 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 $routes->get('/auth/register','auth/Register::index');
+$routes->get('/auth/login','auth/Login::index');
+$routes->get('/dashboard/start', 'Dashboard/Dashboard::index');
 $routes->get('/auth/register/check_user_data','auth/Register::check_user_data');
 $routes->get('/auth/register/company','auth/Register::company');
 $routes->get('/auth/register/new','auth/Register::new');
 $routes->get('/auth/register/check_new_company','auth/Register::check_new_company');
 $routes->get('/auth/register/join','auth/Register::join');
 $routes->get('/auth/register/end','auth/Register::end');
+$routes->get('/auth/check_user','auth/Login::check_user');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

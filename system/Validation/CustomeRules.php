@@ -14,7 +14,10 @@ namespace CodeIgniter\Validation;
 use CodeIgniter\HTTP\RequestInterface;
 use Config\Mimes;
 use Config\Services;
-
+use App\Models\UsuariosModel;
+use App\Models\ClientesModel;
+use App\Models\ClientesUsuariosModel;
+use App\Libraries\ControlProyectosLib; //Libreria personalizada
 /**
  * File validation rules
  */
@@ -29,4 +32,25 @@ class CustomeRules
             return false;
         }
 	}
+
+    public function validate_cliente_usuario($correo)
+    {
+        try {
+            $usuario = new UsuariosModel();
+            $idUsuario = $usuario->getUsuarioxCampo('correo_usuario',$_POST['email'],'password_usuario');
+            if ($idUsuario) {
+                $hash = $idUsuario[0]['password_usuario'];
+                if (ControlProyectosLib::validate_password($_POST['password'],$hash))
+                {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

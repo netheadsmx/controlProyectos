@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Libraries\ControlProyectosLib; //Libreria personalizada
 use App\Models\UsuariosModel;
 use App\Models\ClientesModel;
+use App\Models\ClientesUsuariosModel;
 use CodeIgniter\I18n\Time;
 
 class Test extends BaseController
@@ -40,9 +41,32 @@ class Test extends BaseController
         $session->set('id',21);
     }
 
-    public function gclientes()
+    public function testpwd()
     {
-        $clientes = new ClientesModel();
-        var_dump($clientes->getClientexCampo('corto_cliente','netheads','*'));
+        if (ControlProyectosLib::validate_password('Admin1234567890','$2y$12$/WDdsCOzRItb8st9glAeDeCdtW8L6NhxFWjCGSQeB8hRTv8//bmxy'))
+        { 
+            echo 'TRUE';
+        } else {
+            echo 'FALSE';
+        }
+    }
+
+    public function encriptpwd()
+    {
+        echo ControlProyectosLib::encript_password('Admin1234567890');
+    }
+
+    public function update()
+    {
+        $new = new UsuariosModel();
+        $newdata = [
+            'nombre_usuario' => 'Gonzalo Jesus'
+        ];
+        try {
+            $new->updateUsuarioxCampo('idUsuarios',27,$newdata);
+            echo 'Ok';
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
     }
 }

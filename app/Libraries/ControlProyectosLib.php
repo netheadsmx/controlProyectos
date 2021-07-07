@@ -29,4 +29,14 @@ class ControlProyectosLib
         $next = $hoy->addMonths(1);
         return $next->toLocalizedString('yyyy-MM-dd h:m');
     }
+
+    public static function validate_password($password,$hash) 
+    {
+        if (password_verify($password,$hash))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
