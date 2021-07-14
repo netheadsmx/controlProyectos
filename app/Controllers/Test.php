@@ -6,6 +6,7 @@ use App\Models\UsuariosModel;
 use App\Models\ClientesModel;
 use App\Models\ClientesUsuariosModel;
 use CodeIgniter\I18n\Time;
+use App\Models\ColabsModel;
 
 class Test extends BaseController
 {
@@ -68,5 +69,12 @@ class Test extends BaseController
         } catch (\Exception $e) {
             die($e->getMessage());
         }
+    }
+
+    public function colabs()
+    {
+        $model = new ColabsModel();
+        $colabs = $model->getColabInfo();
+        var_dump($colabs);
     }
 }

@@ -32,10 +32,30 @@ class Database extends Config
 	 */
 	public $default = [
 		'DSN'      => '',
-		'hostname' => 'ec2-3-128-168-246.us-east-2.compute.amazonaws.com',
+		'hostname' => 'controlproyectos.cbkek39hgeh1.us-east-2.rds.amazonaws.com',
 		'username' => 'netheads_demonio',
-		'password' => 's3cur3s0cNET123!@',
+		'password' => 's3cur3s0cNET123Tde9k',
 		'database' => 'Admin_Proyectos',
+		'DBDriver' => 'MySQLi',
+		'DBPrefix' => '',
+		'pConnect' => false,
+		'DBDebug'  => (ENVIRONMENT !== 'production'),
+		'charset'  => 'utf8',
+		'DBCollat' => 'utf8_general_ci',
+		'swapPre'  => '',
+		'encrypt'  => false,
+		'compress' => false,
+		'strictOn' => false,
+		'failover' => [],
+		'port'     => 3306,
+	];
+
+	public $proyectos = [
+		'DSN'      => '',
+		'hostname' => 'controlproyectos.cbkek39hgeh1.us-east-2.rds.amazonaws.com',
+		'username' => 'netheads_demonio',
+		'password' => 's3cur3s0cNET123Tde9k',
+		'database' => 'proyectos',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,

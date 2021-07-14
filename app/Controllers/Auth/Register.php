@@ -6,6 +6,8 @@ use App\Models\PaisesModel;
 use App\Models\UsuariosModel;
 use App\Models\ClientesModel;
 use App\Models\ClientesUsuariosModel;
+use App\Models\ColabsModel;
+use App\Models\SolicitudesModel;
 use App\Libraries\ControlProyectosLib; //Libreria personalizada
 
 class Register extends BaseController
@@ -241,6 +243,19 @@ class Register extends BaseController
 					'Roles_idRoles' => 1
 				];
 				$ClientesUsuarios->insert($data2);
+				$model = new UsuariosModel();
+				$datos = $model->getUsuarioxCampo('idUsuarios',$_SESSION['id'],'nombre_usuario,apellido_usuario,correo_usuario');
+				var_dump($datos);
+				$data3 = [
+					'idColaboradores' => $_SESSION['id'],
+					'nombre_colab' => $datos[0]['nombre_usuario'],
+					'apellido_colab' => $datos[0]['apellido_usuario'],
+					'Rol_idRol' => 1,
+					'EmpresaId' => $idCompany,
+					'correo_colab' => $datos[0]['correo_usuario']
+				];
+				$model2 = new ColabsModel();
+				$model2->insert($data3);
 				return redirect()->to('/auth/register/end/');
 			} catch (\Exception $e) {
 				die($e->getMessage());
@@ -312,15 +327,29 @@ class Register extends BaseController
 
 	public function confirmjoin()
 	{
-		$session = \Config\Services::session();
-		$ClientesUsuarios = new ClientesUsuariosModel();
-		$data = [
-			'Usuarios_idUsuarios' => $_SESSION['id'],
-			'Clientes_idClientes' => htmlspecialchars($_POST['idEmpresa']),
-			'Roles_idRoles' => 2
-		];
-		$ClientesUsuarios->insert($data);
-		return redirect()->to('/auth/register/end/');
+		try {
+			$session = \Config\Services::session();
+			$ClientesUsuarios = new ClientesUsuariosModel();
+			$data = [
+				'Usuarios_idUsuarios' => $_SESSION['id'],
+				'Clientes_idClientes' => htmlspecialchars($_POST['idEmpresa']),
+				'Roles_idRoles' => 2
+			];
+			$ClientesUsuarios->insert($data);
+			$solicitudes = new SolicitudesModel();
+			$data2 = [
+				'nombre_sol' => '',
+				'apellido_sol' => '',
+				'correo_sol' => '',
+				'fecha_sol' => '',
+				'iniciado_por' => 0
+			];
+			$solicitudes->insert($data2);
+			return redirect()->to('/auth/register/end/');
+		} catch (\Exception $e) {
+			die($e->getMessage());
+			//throw new \CodeIgniter\Database\Exceptions\DatabaseException();
+		}
 	}
 
 	public function end()

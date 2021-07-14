@@ -18,7 +18,14 @@ class Dashboard extends BaseController
 		if (!isset($_SESSION['email'])) {
 			return redirect()->to('/auth/login/');
 		} else {
-            echo 'TODO OK';
+            $titulo['titulo'] = "LTE | Dashboard";
+            $menu['menu'] = "dashboard";
+            echo view('templates/header',$titulo);
+            echo view('templates/scripts_main');
+            echo view('templates/menu',$menu);
+            echo view('dashboard/start');
+            echo view('templates/footer');
+            echo view('templates/footer_script_main');
         }
     }
 }
