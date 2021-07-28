@@ -329,20 +329,24 @@ class Register extends BaseController
 	{
 		try {
 			$session = \Config\Services::session();
-			$ClientesUsuarios = new ClientesUsuariosModel();
+/*			$ClientesUsuarios = new ClientesUsuariosModel();
 			$data = [
 				'Usuarios_idUsuarios' => $_SESSION['id'],
 				'Clientes_idClientes' => htmlspecialchars($_POST['idEmpresa']),
 				'Roles_idRoles' => 2
 			];
 			$ClientesUsuarios->insert($data);
+*/
+			$model = new UsuariosModel();
+			$datos = $model->getUsuarioxCampo('idUsuarios',$_SESSION['id'],'*');
 			$solicitudes = new SolicitudesModel();
 			$data2 = [
-				'nombre_sol' => '',
-				'apellido_sol' => '',
-				'correo_sol' => '',
-				'fecha_sol' => '',
-				'iniciado_por' => 0
+				'nombre_sol' => $datos[0]['nombre_usuario'],
+				'apellido_sol' => $datos[0]['apellido_usuario'],
+				'correo_sol' => $datos[0]['correo_usuario'],
+				'fecha_sol' => ControlProyectosLib::get_fecha_hora_today(),
+				'iniciado_por' => 0,
+				'Empresa_sol' => htmlspecialchars($_POST['idEmpresa'])
 			];
 			$solicitudes->insert($data2);
 			return redirect()->to('/auth/register/end/');

@@ -53,4 +53,28 @@ class CustomeRules
             die($e->getMessage());
         }
     }
+
+    public function validate_invitacion_correo ($correo) {
+        try {
+            $usuario = new UsuariosModel();
+            $idUsuario = $usuario->getUsuarioxCampo('correo_usuario',$_POST['correo'],'idUsuarios');
+
+            //Si el correo no esta registrado, se puede enviar la invitacion, si esta registrado entonces
+            //se valida que este registrado con la compania.
+            if (!$idUsuario) {
+                $id = $idUsuario[0]['idUsuarios'];
+                $cia = new ClientesUsuariosModel();
+                if ($cia->validarUsuarioCliente($id,$_SESSION['cmpnId'])) {
+                    //Si la compania ya tiene registrado al usuario, entonces arrojar un error para no enviar invitacion
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

@@ -55,12 +55,15 @@ class Login extends BaseController
 			$session = \Config\Services::session();
 			$usuario = new UsuariosModel();
 			$info_u = $usuario->getUsuarioxCampo('correo_usuario',htmlspecialchars($_POST['email']),'idUsuarios,nombre_usuario,apellido_usuario,correo_usuario,Paises_idPaises,valido_usuario');
+			$cliente = new ClientesUsuariosModel();
+			$info_c = $cliente->getUsuarioClienteCampo('Usuarios_idUsuarios',$info_u[0]['idUsuarios'],'Clientes_idClientes');
 			$session->set('nmUsr',$info_u[0]['nombre_usuario']);
 			$session->set('lstUsr',$info_u[0]['apellido_usuario']);
 			$session->set('email',$info_u[0]['correo_usuario']);
 			$session->set('idUsr',$info_u[0]['idUsuarios']);
 			$session->set('cntrUsr',$info_u[0]['Paises_idPaises']);
 			$session->set('vldUsr',$info_u[0]['valido_usuario']);
+			$session->set('cmpnId',$info_c[0]['Clientes_idClientes']);
 			return redirect()->to("/dashboard/start");
         }
     }

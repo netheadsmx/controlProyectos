@@ -7,6 +7,14 @@ class SolicitudesModel extends  Model {
     protected $table = 'Solicitudes';
     protected $primaryKey = 'idSolicitudes';
     protected $returnType = 'array';
-    protected $allowedFields = ['idSolicitudes','nombre_sol','apellido_sol','correo_sol','fecha_sol','iniciado_por'];
+    protected $allowedFields = ['idSolicitudes','nombre_sol','apellido_sol','correo_sol','fecha_sol','iniciado_por','Empresa_sol'];
+
+    public function getSolicitudes($campo, $valorcampo, $devolver)
+    {
+        return $this->asArray()
+                    ->select($devolver)
+                    ->where([$campo=>$valorcampo])
+                    ->find();
+    }
     
 }

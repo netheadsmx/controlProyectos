@@ -32,7 +32,7 @@
         monthsRegex = /^(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|ene\.?|feb\.?|mar\.?|abr\.?|may\.?|jun\.?|jul\.?|ago\.?|sep\.?|oct\.?|nov\.?|dic\.?)/i;
 
     var esMx = moment.defineLocale('es-mx', {
-        months: 'enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre'.split(
+        months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split(
             '_'
         ),
         monthsShort: function (m, format) {
@@ -104,7 +104,7 @@
             yy: '%d años',
         },
         dayOfMonthOrdinalParse: /\d{1,2}º/,
-        ordinal: '%dº',
+        //ordinal: '%dº',
         week: {
             dow: 0, // Sunday is the first day of the week.
             doy: 4, // The week that contains Jan 4th is the first week of the year.

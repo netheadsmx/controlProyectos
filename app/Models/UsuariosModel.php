@@ -31,4 +31,5 @@ class UsuariosModel extends Model {
 			//throw new \CodeIgniter\Database\Exceptions\DatabaseException();
         }
     }
+
 }

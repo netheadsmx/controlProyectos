@@ -24,6 +24,13 @@ class ClientesUsuariosModel extends  Model {
             die($e->getMessage());
 				//throw new \CodeIgniter\Database\Exceptions\DatabaseException();
         }
+    }
 
+    public function getUsuarioClienteCampo($campo, $valorcampo, $devolver)
+    {
+        return $this->asArray()
+        ->select($devolver)
+        ->where([$campo=>$valorcampo])
+        ->find();
     }
 }

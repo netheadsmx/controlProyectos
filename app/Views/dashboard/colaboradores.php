@@ -4,10 +4,13 @@
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
+          <div class="col-sm-3">
             <h1 class="m-0">Colaboradores</h1>
           </div><!-- /.col -->
-          <div class="col-sm-6">
+          <div class="col-sm-6" id="mensajes">
+
+          </div>
+          <div class="col-sm-3">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
               <li class="breadcrumb-item active">Colaboradores</li>
@@ -27,40 +30,51 @@
           <section class="col-lg-6 connectedSortable">
             <div class="card">
               <div class="card-header">
-                Colaboradores registrados
+                Colaboradores
               </div>
               <div class="card-body">
-              <form id="frm-example" method="POST">
-                <div>
-                  <button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar</button>
-                  <button type="button" class="btn btn-default">Editar</button>
-                  <button type="button" onclick="eliminarBtn()" class="btn btn-default">Eliminar</button>
+                <div style="margin-bottom:10px;">
+                  <button type="button" class="btn btn-default" onclick="editarColabBtn()">Editar</button>
+                  <button type="button" onclick="eliminarColabBtn()" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Eliminar</button>
                 </div>
                 <table id="colabsTbl" class="table table-bordered table-hover" style="width:100%">
                   <thead>
                   <tr>
                     <td></td>
                     <td>Nombre</td>
-                    <td>Rol</td>
                     <td>Correo</td>
+                    <td>Estado</td>
                   </tr>
                   </thead>
                   <tbody>
                   </tbody>
                 </table>
-                </form>
               </div>
             </div>
           </section>
           <section class="col-lg-6 connectedSortable">
             <div class="card">
               <div class="card-header">
-                Solicitudes pendientes
+                Solicitudes e Invitaciones
               </div>
               <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <div style="margin-bottom:10px;">
+                  <button type="button" class="btn btn-success" onclick="invitarColabBtn();"><i class="fas fa-plus"></i> Invitar</button>
+                  <button type="button" class="btn btn-primary"><i class="fas fa-check"></i> Aceptar</button>
+                  <button type="button" onclick="eliminarBtn()" class="btn btn-danger"><i class="fas fa-times-circle"></i> Rechazar</button>
+                </div>
+                <table id="solTbl" class="table table-bordered table-hover" style="width:100%">
+                  <thead>
+                  <tr>
+                    <td></td>
+                    <td>Nombre</td>
+                    <td>Correo</td>
+                    <td>Fecha de Solicitud</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
               </div>
             </div>
           </section>
@@ -72,3 +86,85 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+
+    <!-- INVITAR COLAB MODAL -->
+    <div class="modal fade" id="addColabModal">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Invitar a un Colaborador</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                  <input type="hidden" id="idColab" name="idColab">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Nombre *</label>
+                    <input type="email" class="form-control" id="addColabNombre" placeholder="Nombre Colaborador" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Apellido *</label>
+                    <input type="email" class="form-control" id="addColabApellido" placeholder="Apellido Colaborador" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Correo Electr&oacute;nico *</label>
+                    <input type="email" class="form-control" id="addColabCorreo" placeholder="Correo Colaborador" required>
+                  </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" onclick="addColab();">Enviar Invitaci&oacute;n</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+  </div>
+  <!-- FIN INVITAR COLAB MODAL -->
+
+  <!-- EDITAR COLAB MODAL -->
+  <div class="modal fade" id="editarColabModal">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Editar Colaborador</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+              <input type="hidden" id="idColab" name="idColab">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Nombre</label>
+                    <input type="email" class="form-control" id="editColabNombre" placeholder="Nombre Colaborador" disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Correo Electr&oacute;nico</label>
+                    <input type="email" class="form-control" id="editColabCorreo" placeholder="Correo Colaborador" disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Estado</label>
+                    <select class="custom-select" name="estado" id="estado">
+                      <?php
+                          foreach ($estados as $e) {
+                              echo '<option id="estado_'.$e['idEstados'].'" value="'.$e['idEstados'].'">'.$e['nombre'].'</option>';
+                          }
+                      ?>
+                    </select>
+                  </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" onclick="updateColab();">Guardar Cambios</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+  </div>
+      <!-- FIN EDITAR COLAB MODAL -->

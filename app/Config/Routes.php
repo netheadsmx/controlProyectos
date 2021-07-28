@@ -38,6 +38,7 @@ $routes->get('/auth/login','auth/Login::index');
 $routes->get('/dashboard/start', 'Dashboard/Dashboard::index');
 $routes->get('/dashboard/colabs', 'Dashboard/Colabs::index');
 $routes->get('/dashboard/getcolabs', 'Dashboard/Colabs::getColabs');
+$routes->get('/dashboard/getSolicitudes', 'Dashboard/Colabs::getSolicitudes');
 $routes->get('/auth/register/check_user_data','auth/Register::check_user_data');
 $routes->get('/auth/register/company','auth/Register::company');
 $routes->get('/auth/register/new','auth/Register::new');
