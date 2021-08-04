@@ -77,4 +77,31 @@ class Test extends BaseController
         $colabs = $model->getColabInfo();
         var_dump($colabs);
     }
+
+    public function validate_invitacion_correo () {
+        try {
+            $usuario = new UsuariosModel();
+            $idUsuario = $usuario->getUsuarioxCampo('correo_usuario','jp@netheads.com.mx','idUsuarios');
+            //Si el correo no esta registrado, se puede enviar la invitacion, si esta registrado entonces
+            //se valida que este registrado con la compania.
+            var_dump($idUsuario);
+            if ($idUsuario) {
+                $id = $idUsuario[0]['idUsuarios'];
+                $cia = new ClientesUsuariosModel();
+                if ($cia->validarUsuarioCliente($id,6)) {
+                    //Si la compania ya tiene registrado al usuario, entonces arrojar un error para no enviar invitacion
+                    //return false;
+                    echo "IF 1";
+                } else {
+                    echo "IF 2";
+                    //return true;
+                }
+            } else {
+                echo "IF 3";
+                //return true;
+            }
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

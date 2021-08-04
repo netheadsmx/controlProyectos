@@ -27,7 +27,7 @@
         <!-- Main row -->
         <div class="row">
           <!-- Left col -->
-          <section class="col-lg-6 connectedSortable">
+          <section class="col-lg-12 connectedSortable">
             <div class="card">
               <div class="card-header">
                 Colaboradores
@@ -43,6 +43,7 @@
                     <td></td>
                     <td>Nombre</td>
                     <td>Correo</td>
+                    <td>Tipo de Usuario</td>
                     <td>Estado</td>
                   </tr>
                   </thead>
@@ -51,8 +52,6 @@
                 </table>
               </div>
             </div>
-          </section>
-          <section class="col-lg-6 connectedSortable">
             <div class="card">
               <div class="card-header">
                 Solicitudes e Invitaciones
@@ -60,8 +59,8 @@
               <div class="card-body">
                 <div style="margin-bottom:10px;">
                   <button type="button" class="btn btn-success" onclick="invitarColabBtn();"><i class="fas fa-plus"></i> Invitar</button>
-                  <button type="button" class="btn btn-primary"><i class="fas fa-check"></i> Aceptar</button>
-                  <button type="button" onclick="eliminarBtn()" class="btn btn-danger"><i class="fas fa-times-circle"></i> Rechazar</button>
+                  <button type="button" class="btn btn-primary" onclick="aceptarColabBtn();"><i class="fas fa-check"></i> Aceptar</button>
+                  <button type="button" class="btn btn-danger" onclick="eliminarSolBtn()"><i class="fas fa-times-circle"></i> Rechazar</button>
                 </div>
                 <table id="solTbl" class="table table-bordered table-hover" style="width:100%">
                   <thead>
@@ -70,6 +69,7 @@
                     <td>Nombre</td>
                     <td>Correo</td>
                     <td>Fecha de Solicitud</td>
+                    <td>Tipo</td>
                   </tr>
                   </thead>
                   <tbody>
@@ -168,3 +168,53 @@
         <!-- /.modal-dialog -->
   </div>
       <!-- FIN EDITAR COLAB MODAL -->
+
+      <!-- CONFIRMACION ACEPTAR SOLICITUDES MODAL -->
+  <div class="modal fade" id="confirmarSolModal">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Aceptar Solicitud</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmNum"></p>
+                <p>Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" onclick="aceptarSol();">Aceptar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+  </div>
+      <!-- FCONFIRMACION ACEPTAR SOLICITUDES MODAL -->
+
+     <!-- CONFIRMACION ELIMINAR SOLICITUD MODAL -->
+     <div class="modal fade" id="confirmarDelSolModal">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Eliminar Solicitud</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <p id="eliminarNum"></p>
+                <p>Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-danger" onclick="eliminarSol();">Eliminar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+  </div>
+      <!-- CONFIRMACION ELIMINAR SOLICITUD MODAL -->

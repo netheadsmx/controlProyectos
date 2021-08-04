@@ -91,11 +91,12 @@ class Colabs extends BaseController
 			],
             'correo' => [
 				'label' => 'Correo electronico',
-				'rules' => 'required|valid_email',
+				'rules' => 'required|valid_email|validate_invitacion_correo|validate_invitacion_enviada',
 				'errors' => [
 					'required' => '{field} es requerido.',
                     'valid_email' => 'Correo no valido, favor de verificar.',
-                    'validate_invitacion_correo' => 'Este correo ya esta registrado, favor de verificar.'
+                    'validate_invitacion_correo' => 'Este correo ya esta registrado, favor de verificar.',
+                    'validate_invitacion_enviada' => 'Ya has enviado una invitacion a este correo, favor de verificar.'
 				]
 			]
         ]);
@@ -108,7 +109,81 @@ class Colabs extends BaseController
             ];
             echo json_encode($data);
         } else {
-            echo json_encode ("TODO BIEN");
+            $insert = [
+                'nombre_sol' => htmlspecialchars($_POST['nombre']),
+                'apellido_sol' => htmlspecialchars($_POST['apellido']),
+                'correo_sol' => htmlspecialchars($_POST['correo']),
+                'fecha_sol' => ControlProyectosLib::get_fecha_hora_today(),
+                'iniciado_por' => $_SESSION['idUsr'],
+                'Empresa_sol' => $_SESSION['cmpnId'],
+                'tipo' => 'I'
+            ];
+            $model = new SolicitudesModel();
+            try {
+                $model->insert($insert);
+                $data = [
+                    'result' => true
+                ];
+                echo json_encode($data);
+            } catch (\Exception $e) {
+                die($e->getMessage());
+                //throw new \CodeIgniter\Database\Exceptions\DatabaseException();
+            }
         } 
+    }
+
+    public function aceptarSolicitudes()
+    {
+        $solicitudes = $_POST['solicitudes'];
+        $model = new SolicitudesModel();
+        foreach ($solicitudes as $s) {
+            $solicitud = $model->checkSolicitudValida($s,$_SESSION['cmpnId']);
+            if ($solicitud) {
+                $colab = [
+                    'nombre_colab' => $solicitud[0]['nombre_sol'],
+                    'apellido_colab' => $solicitud[0]['apellido_sol'],
+                    'Rol_idRol' => 1,
+                    'correo_colab' => $solicitud[0]['correo_sol'],
+                    'Estados_idEstados' => 1,
+                    'activado' => 1,
+                    'ultimo_cambio' => ControlProyectosLib::get_fecha_hora_today()
+                ];
+                $insertar = new ColabsModel();
+                if ($insertar->insert($colab)) {
+                    $data = [
+                        'error' => false,
+                    ];
+                } else {
+                    $data = [
+                        'error' => true,
+                        'descripcion' => 'La solicitud aprobada no es valida. Solo se deben de aceptar solicitudes y no invitaciones'
+                    ];
+                } 
+            } else {
+                $data = [
+                    'error' => true,
+                    'descripcion' => 'La solicitud aprobada no es valida. Solo se deben de aceptar solicitudes y no invitaciones'
+                ]; 
+            } 
+        } 
+        echo json_encode($data);
+    }
+
+    public function eliminarSolicitudes() {
+        $solicitudes = $_POST['eliminar'];
+        $model = new SolicitudesModel();
+        foreach ($solicitudes as $s) {
+            if ($model->eliminarSolicitud($s)) {
+                $data = [
+                    'error' => false,
+                ];
+            } else {
+                $data = [
+                    'error' => true,
+                    'descripcion' => 'Ha ocurrido un error al eliminar la solicitud, favor de intentar m&aacute;s tarde.'
+                ]; 
+            }
+        }
+        echo json_encode($data);
     }
 }

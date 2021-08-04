@@ -12,11 +12,11 @@ class ColabsModel extends  Model {
     public function getColabInfo()
     {
         try {
-            $sql = 'SELECT * FROM Colaboradores as C where C.Estados_idEstados=1 OR C.Estados_idEstados=2 OR C.Estados_idEstados=3;';
+            $sql = 'SELECT C.*, T.nombre_tipousuario FROM Colaboradores as C INNER JOIN TipoUsuarios as T where C.TipoUsuarios_idTipoUsuarios=T.idTipoUsuarios AND C.Estados_idEstados=1 OR C.Estados_idEstados=2 OR C.Estados_idEstados=3;';
             $query = $this->query($sql);
             $result = $query->getResultArray();
             return $result;
-        } catch (\Exception $s) {
+        } catch (\Exception $e) {
             die($e->getMessage());
             //throw new \CodeIgniter\Database\Exceptions\DatabaseException();
         }

@@ -19,7 +19,6 @@ class UsuariosModel extends Model {
             die($e->getMessage());
 			//throw new \CodeIgniter\Database\Exceptions\DatabaseException();
         }
-
     }
 
     public function updateUsuarioxCampo($id, $data)

@@ -62,14 +62,15 @@ $(document).ready(function() {
             return '<a href="mailto:'+data+'">'+data+'</a>'
           }
         },
+        {"data": "nombre_tipousuario"},
         {"data": "Estados_idEstados",
           "render" : function (data,type,row) {
             if (data==1) {
-              return '<i class="fas fa-check-circle" style="color:green;"></i>'
+              return '<i class="fas fa-check-circle" style="color:green;"></i> Activo'
             } else if (data==2) {
-              return '<i class="fas fa-clock" style="color:gray;"></i>'
+              return '<i class="fas fa-clock" style="color:gray;"></i> Pendiente'
             } else if (data==3) {
-              return '<i class="fas fa-pause-circle" style="color:orange;"></i>'
+              return '<i class="fas fa-pause-circle" style="color:orange;"></i> Deshabilitado'
             } 
           }
         }
@@ -83,7 +84,7 @@ $(document).ready(function() {
 }
 
 function solicitudesTbl() {
-    table = $("#solTbl").DataTable({
+    tableSol = $("#solTbl").DataTable({
       "ajax": {
         url: "<?php echo site_url('/dashboard/colabs/getSolicitudes');?>",
         type: "POST",
@@ -106,7 +107,16 @@ function solicitudesTbl() {
             return '<a href="mailto:'+data+'">'+data+'</a>'
           }
         },
-        {"data": "fecha_sol"}
+        {"data": "fecha_sol"},
+        {"data":"tipo",
+          "render": function (data,type,row){
+            if(data=='S') {
+              return 'Solicitud'
+            } else if (data == 'I') {
+              return 'Invitaci&oacute;n'
+            }
+          }
+        }
       ],
       "columnDefs":[
         {
@@ -205,6 +215,18 @@ function getColabsSelected() {
   return elements;
 }
 
+function getSolsSelected() {
+  var form = this;
+  var rows_selected = tableSol.column(0).checkboxes.selected();
+  // Iterate over all selected checkboxes
+  var elements = [];
+  $.each(rows_selected, function(index, rowId){
+    // Create a hidden element
+    elements.push(rowId);
+  });
+  return elements;
+}
+
 function addColab() {
   var nombre = document.getElementById("addColabNombre").value;
   var apellido = document.getElementById("addColabApellido").value;
@@ -215,26 +237,94 @@ function addColab() {
       dataType: "json",
       data: {nombre:nombre, apellido:apellido,correo:correo},
       success: function (result) {
-        console.log(result);
         $("#addColabModal").modal("hide");
         var texto = "";
         if (result['result'] == false) {
-          console.log(result['errors']['nombre']);
-          document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>Se ha presentado un error, favor de intentarlo mas tarde.</div>";
+          for (var id in result['errors']) {
+            texto += "<p>"+ result['errors'][id]+ "</p>"
+          }
+          document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>"+texto+"</div>";
         } else {
-
+          document.getElementById("mensajes").innerHTML = "<div class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i>Bien!</h5>Se ha enviado la invitaci&oacute;n con &eacute;xito</div>";
         }
-        
-        $('#colabsTbl').DataTable().ajax.reload();
+        $('#solTbl').DataTable().ajax.reload();
       },
       error: function (error) {
-        $("#editarColabModal").modal("hide");
+        $("#addColabModal").modal("hide");
+        document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>Se ha presentado un error, favor de intentarlo mas tarde.</div>";
+      }
+    });  
+}
+
+function aceptarColabBtn()
+{
+  var aceptados = getSolsSelected();
+  if (aceptados.length == 1) {
+    document.getElementById("confirmNum").innerHTML = "Se aceptara una solicitud.";
+  } else if (aceptados.length > 1) {
+    document.getElementById("confirmNum").innerHTML = "Se aceptaran "+aceptados.length+" solicitudes.";
+  }
+  $("#confirmarSolModal").modal("show");
+}
+
+function aceptarSol() {
+  var aceptados = getSolsSelected();
+  $("#confirmarSolModal").modal("hide");
+  $.ajax ({
+      type : "POST",
+      url: "<?php echo site_url('/dashboard/colabs/aceptarSolicitudes');?>",
+      dataType: "json",
+      data: {solicitudes:aceptados},
+      success: function (result) {
+        if (result['error'] == false) {
+          $("#confirmarSolModal").modal("hide");
+          $('#solTbl').DataTable().ajax.reload();
+          $('#colabsTbl').DataTable().ajax.reload();
+          document.getElementById("mensajes").innerHTML = "<div class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i>Bien!</h5>Se han aceptado las solicitudes con &eacute;xito.</div>";
+        } else {
+          document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>"+result['descripcion']+"</div>";
+        }
+      },
+      error: function (error) {
+        $("#confirmarSolModal").modal("hide");
         document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>Se ha presentado un error, favor de intentarlo mas tarde.</div>";
       }
     });
-  
 }
 
+function eliminarSolBtn()
+{
+  var aceptados = getSolsSelected();
+  if (aceptados.length == 1) {
+    document.getElementById("eliminarNum").innerHTML = "Se eliminar&aacute; una solicitud.";
+  } else if (aceptados.length > 1) {
+    document.getElementById("eliminarNum").innerHTML = "Se eliminar&aacute;n "+aceptados.length+" solicitudes.";
+  }
+  $("#confirmarDelSolModal").modal("show");
+}
+
+function eliminarSol()
+{
+  var eliminados = getSolsSelected();
+  $("#confirmarDelSolModal").modal("hide");
+  $.ajax ({
+      type : "POST",
+      url: "<?php echo site_url('/dashboard/colabs/eliminarSolicitudes');?>",
+      dataType: "json",
+      data: {eliminar:eliminados},
+      success: function (result) {
+        if (result['error'] == false) {
+          $('#solTbl').DataTable().ajax.reload();
+          document.getElementById("mensajes").innerHTML = "<div class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i>Bien!</h5>Se han eliminado las solicitudes con &eacute;xito.</div>";
+        } else {
+          document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>"+result['descripcion']+"</div>";
+        }
+      },
+      error: function (error) {
+        document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>Se ha presentado un error, favor de intentarlo mas tarde.</div>";
+      }
+    });
+}
 
 </script>
 </body>

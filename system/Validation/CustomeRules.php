@@ -17,6 +17,7 @@ use Config\Services;
 use App\Models\UsuariosModel;
 use App\Models\ClientesModel;
 use App\Models\ClientesUsuariosModel;
+use App\Models\SolicitudesModel;
 use App\Libraries\ControlProyectosLib; //Libreria personalizada
 /**
  * File validation rules
@@ -58,10 +59,9 @@ class CustomeRules
         try {
             $usuario = new UsuariosModel();
             $idUsuario = $usuario->getUsuarioxCampo('correo_usuario',$_POST['correo'],'idUsuarios');
-
             //Si el correo no esta registrado, se puede enviar la invitacion, si esta registrado entonces
             //se valida que este registrado con la compania.
-            if (!$idUsuario) {
+            if ($idUsuario) {
                 $id = $idUsuario[0]['idUsuarios'];
                 $cia = new ClientesUsuariosModel();
                 if ($cia->validarUsuarioCliente($id,$_SESSION['cmpnId'])) {
@@ -70,6 +70,22 @@ class CustomeRules
                 } else {
                     return true;
                 }
+            } else {
+                return true;
+            }
+        } catch (\Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function validate_invitacion_enviada($correo) {
+        try {
+            $model = new SolicitudesModel();
+            $sol = $model->getSolicitudxEmpresaCorreo($_POST['correo'],$_SESSION['cmpnId']);
+            if ($sol) {
+                //Si el correo ya existe en las solicitudes, se envia un error ya que solo puede estar
+                //una solicitud por correo y por cliente
+                return false;
             } else {
                 return true;
             }

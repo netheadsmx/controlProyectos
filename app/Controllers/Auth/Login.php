@@ -64,6 +64,10 @@ class Login extends BaseController
 			$session->set('cntrUsr',$info_u[0]['Paises_idPaises']);
 			$session->set('vldUsr',$info_u[0]['valido_usuario']);
 			$session->set('cmpnId',$info_c[0]['Clientes_idClientes']);
+			$data = [
+				'ultima_conexion' => ControlProyectosLib::get_fecha_hora_today()
+			];
+			$usuario->updateUsuarioxCampo($info_u[0]['idUsuarios'],$data);
 			return redirect()->to("/dashboard/start");
         }
     }
