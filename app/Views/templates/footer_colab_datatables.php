@@ -152,7 +152,7 @@ function invitarColabBtn() {
 function editarColabBtn() {
   var elementos = getColabsSelected();
   if (elementos.length == 0) {
-    document.getElementById("mensajes").innerHTML = "<div class='alert alert-warning alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Alert!</h5>Se debe de seleccionar al menos un elemento.</div>";
+    document.getElementById("mensajes").innerHTML = "<div class='alert alert-warning alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Alert!</h5>Se debe de seleccionar a un colaborador.</div>";
   } else if (elementos.length > 1) {
     document.getElementById("mensajes").innerHTML = "<div class='alert alert-warning alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Alert!</h5>Se debe de editar un colaborador a la vez.</div>";
   } else {
@@ -166,10 +166,12 @@ function editarColabBtn() {
         var nombrecolab = result[0]['nombre_colab'] +' '+result[0]['apellido_colab'];
         var correo = result[0]['correo_colab'];
         var estado = 'estado_'+result[0]['Estados_idEstados'];
+        var tipo = 'tipo_'+result[0]['TipoUsuarios_idTipoUsuarios'];
         var idColab = result[0]['idColaboradores'];
         document.getElementById("idColab").value = idColab;
         document.getElementById("editColabNombre").value = nombrecolab;
         document.getElementById("editColabCorreo").value = correo;
+        document.getElementById(tipo).selected = true;
         document.getElementById(estado).selected = true;
         if (result[0]['activado'] == 1) {
           document.getElementById("estado_2").disabled = true;
@@ -259,22 +261,27 @@ function addColab() {
 function aceptarColabBtn()
 {
   var aceptados = getSolsSelected();
-  if (aceptados.length == 1) {
+  limpiar_mensajes();
+  if (aceptados == 0) {
+    document.getElementById("mensajes").innerHTML = "<div class='alert alert-warning alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Alert!</h5>Se debe de seleccionar a una solicitud.</div>";
+  } else if (aceptados.length == 1) {
     document.getElementById("confirmNum").innerHTML = "Se aceptara una solicitud.";
+    $("#confirmarSolModal").modal("show");
   } else if (aceptados.length > 1) {
     document.getElementById("confirmNum").innerHTML = "Se aceptaran "+aceptados.length+" solicitudes.";
+    $("#confirmarSolModal").modal("show");
   }
-  $("#confirmarSolModal").modal("show");
 }
 
 function aceptarSol() {
   var aceptados = getSolsSelected();
+  var tipocolab = parseInt(document.getElementById("colabselected").value);
   $("#confirmarSolModal").modal("hide");
   $.ajax ({
       type : "POST",
       url: "<?php echo site_url('/dashboard/colabs/aceptarSolicitudes');?>",
       dataType: "json",
-      data: {solicitudes:aceptados},
+      data: {solicitudes:aceptados,colab:tipocolab},
       success: function (result) {
         if (result['error'] == false) {
           $("#confirmarSolModal").modal("hide");
@@ -324,6 +331,11 @@ function eliminarSol()
         document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>Se ha presentado un error, favor de intentarlo mas tarde.</div>";
       }
     });
+}
+
+function limpiar_mensajes ()
+{
+  document.getElementById("mensajes").innerHTML = "";
 }
 
 </script>

@@ -156,6 +156,16 @@
                       ?>
                     </select>
                   </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Tipo de Colaborador</label>
+                    <select class="custom-select" name="tipocolab" id="tipocolab">
+                      <?php
+                          foreach ($tipousuarios as $tu) {
+                              echo '<option id="tipo_'.$tu['idTipoUsuarios'].'" value="'.$tu['idTipoUsuarios'].'">'.$tu['nombre_tipousuario'].'</option>';
+                          }
+                      ?>
+                    </select>
+                  </div>
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -181,6 +191,24 @@
             </div>
             <div class="modal-body">
                 <p id="confirmNum"></p>
+                <form>
+                <form>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Tipo de Colaborador</label>
+                    <select class="custom-select" name="colabselected" id="colabselected">
+                      <?php
+                          foreach ($tipousuarios as $tu) {
+                            if ($tu['idTipoUsuarios'] == 3)
+                            {
+                              echo '<option id="tipo_'.$tu['idTipoUsuarios'].'" value="'.$tu['idTipoUsuarios'].'" selected>'.$tu['nombre_tipousuario'].'</option>';
+                            } else {
+                              echo '<option id="tipo_'.$tu['idTipoUsuarios'].'" value="'.$tu['idTipoUsuarios'].'">'.$tu['nombre_tipousuario'].'</option>';
+                            }
+                          }
+                      ?>
+                    </select>
+                  </div>
+                </form>
                 <p>Deseas continuar?</p>
             </div>
             <div class="modal-footer justify-content-between">

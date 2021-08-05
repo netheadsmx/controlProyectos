@@ -5,6 +5,7 @@ use App\Controllers\BaseController;
 use App\Models\ColabsModel;
 use App\Models\SolicitudesModel;
 use App\Models\EstadosModel;
+use App\Models\TipoUsuariosModel;
 use App\Libraries\ControlProyectosLib; //Libreria personalizada
 
 class Colabs extends BaseController
@@ -22,6 +23,8 @@ class Colabs extends BaseController
 		} else {
             $model = new EstadosModel();
             $datos['estados'] = $model->findAll();
+            $model2 = new TipoUsuariosModel();
+            $datos['tipousuarios'] = $model2->findAll();
             $titulo['titulo'] = "LTE | Colaboradores";
             $menu['menu'] = "colabs";
             echo view('templates/header',$titulo);
@@ -29,7 +32,7 @@ class Colabs extends BaseController
             echo view('templates/menu',$menu);
             echo view('dashboard/colaboradores',$datos);
             echo view('templates/footer');
-            echo view('templates/footer_script_datatables');
+            echo view('templates/footer_colab_datatables');
         }
     }
 
@@ -142,17 +145,19 @@ class Colabs extends BaseController
                 $colab = [
                     'nombre_colab' => $solicitud[0]['nombre_sol'],
                     'apellido_colab' => $solicitud[0]['apellido_sol'],
-                    'Rol_idRol' => 1,
+                    'EmpresaId' => $_SESSION['cmpnId'],
                     'correo_colab' => $solicitud[0]['correo_sol'],
                     'Estados_idEstados' => 1,
                     'activado' => 1,
-                    'ultimo_cambio' => ControlProyectosLib::get_fecha_hora_today()
+                    'ultimo_cambio' => ControlProyectosLib::get_fecha_hora_today(),
+                    'TipoUsuarios_idTipoUsuarios' => (int)htmlspecialchars($_POST['colab'])
                 ];
                 $insertar = new ColabsModel();
                 if ($insertar->insert($colab)) {
                     $data = [
                         'error' => false,
                     ];
+                    $model->eliminarSolicitud($s);
                 } else {
                     $data = [
                         'error' => true,
@@ -177,6 +182,9 @@ class Colabs extends BaseController
                 $data = [
                     'error' => false,
                 ];
+                //SE NECESITA NOTIFICAR AL USUARIO QUE SE RECHAZO SU SOICITUD DE UNIRSE Y SE
+                //DEBE DE DAR OPCIÓN DE VOLVER A ENVIAR UNA SOLICITUD, O DE ABANDONAR LA PLATAFORMA
+                //SI SE ABANDONA LA PLATAFORMA SE DEBERA DE ELIMINAR LA CUENTA DE LA TABLA USUARIOS
             } else {
                 $data = [
                     'error' => true,

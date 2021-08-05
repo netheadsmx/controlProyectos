@@ -33,7 +33,7 @@ class Email extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $protocol = 'mail';
+	public $protocol = 'sendmail';
 
 	/**
 	 * The server path to Sendmail.
@@ -47,35 +47,38 @@ class Email extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $SMTPHost;
+	//public $SMTPHost;
+	public $SMTPHost='mail.netheads.com.mx ';
 
 	/**
 	 * SMTP Username
 	 *
 	 * @var string
 	 */
-	public $SMTPUser;
+	//public $SMTPUser;
+	public $SMTPUser='no-reply@netheads.com.mx';
 
 	/**
 	 * SMTP Password
 	 *
 	 * @var string
 	 */
-	public $SMTPPass;
+	//public $SMTPPass;
+	public $SMTPPass= '&Z1]vN{dy3@a';
 
 	/**
 	 * SMTP Port
 	 *
 	 * @var integer
 	 */
-	public $SMTPPort = 25;
+	public $SMTPPort = 465;
 
 	/**
 	 * SMTP Timeout (in seconds)
 	 *
 	 * @var integer
 	 */
-	public $SMTPTimeout = 5;
+	public $SMTPTimeout = 60;
 
 	/**
 	 * Enable persistent SMTP connections

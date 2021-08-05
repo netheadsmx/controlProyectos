@@ -104,4 +104,46 @@ class Test extends BaseController
             die($e->getMessage());
         }
     }
+
+    public function enviar_correo()
+    {
+        
+        $data = 'https://www.netheads.com.mx';
+        $message = "Please activate the account ".anchor('user/activate/'.$data,'Activate Now','');
+        $email = \Config\Services::email();
+        $email->setFrom('no-reply@netheads.com.mx', 'ControlProyectos');
+        $email->setTo('gonzalo.rodriguezh@outlook.com');
+        $email->setSubject('Titulo del correo | tutsmake.com');
+        $email->setMessage($message);//your message here
+      
+        //$email->setCC('another@emailHere');//CC
+        //$email->setBCC('thirdEmail@emialHere');// and BCC
+        //$filename = '/img/yourPhoto.jpg'; //you can use the App patch 
+        //$email->attach($filename);
+         
+        if($email->send()) {
+            echo "FUNCIONO";
+            var_dump($email);
+        } else {
+            echo "NO FUNCIONO";
+            var_dump($email);
+            //$email->printDebugger();
+        }
+
+        /*
+        $to      = 'gonzalo.rodriguezh@outlook.com';
+        $subject = 'the subject';
+        $message = 'hello';
+        $headers = 'From: no-reply@netheads.com.mx'       . "\r\n" .
+                    'Reply-To: no-reply@netheads.com.mx' . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+
+        mail($to, $subject, $message, $headers);
+        */
+    }
+
+    public function phpconfig()
+    {
+        phpinfo();
+    }
 }

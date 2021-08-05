@@ -346,7 +346,8 @@ class Register extends BaseController
 				'correo_sol' => $datos[0]['correo_usuario'],
 				'fecha_sol' => ControlProyectosLib::get_fecha_hora_today(),
 				'iniciado_por' => 0,
-				'Empresa_sol' => htmlspecialchars($_POST['idEmpresa'])
+				'Empresa_sol' => htmlspecialchars($_POST['idEmpresa']),
+				'tipo' => 'S'
 			];
 			$solicitudes->insert($data2);
 			return redirect()->to('/auth/register/end/');

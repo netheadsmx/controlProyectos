@@ -7,7 +7,7 @@ class ColabsModel extends  Model {
     protected $table = 'Colaboradores';
     protected $primaryKey = 'idColaboradores';
     protected $returnType = 'array';
-    protected $allowedFields = ['nombre_colab','apellido_colab','Rol_idRol','EmpresaId','correo_colab','Estados_idEstados','activado','ultimo_cambio'];
+    protected $allowedFields = ['nombre_colab','apellido_colab','EmpresaId','correo_colab','Estados_idEstados','activado','ultimo_cambio','TipoUsuarios_idTipoUsuarios'];
 
     public function getColabInfo()
     {
