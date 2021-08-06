@@ -137,12 +137,11 @@ function solicitudesTbl() {
 function eliminarColabBtn() {
   var elementos = getColabsSelected();
   if (elementos.length == 0) {
-    document.getElementById("mensajes").innerHTML = "<div class='alert alert-warning alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Alert!</h5>Se debe de seleccionar al menos un elemento.</div>";
+    document.getElementById("mensajes").innerHTML = "<div class='alert alert-warning alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Alert!</h5>Se debe de seleccionar al menos un colaborador.</div>";
   } else {
     document.getElementById("mensajes").innerHTML = "";
-    $("#modal-lg").modal("show");
+    $("#confirmarDelColabModal").modal("show");
   }
-  console.log(elementos);
 }
 
 function invitarColabBtn() {
@@ -336,6 +335,29 @@ function eliminarSol()
 function limpiar_mensajes ()
 {
   document.getElementById("mensajes").innerHTML = "";
+}
+
+function eliminarColab()
+{
+  var elementos = getColabsSelected();
+  $.ajax ({
+      type : "POST",
+      url: "<?php echo site_url('/dashboard/colabs/eliminarColaborador');?>",
+      dataType: "json",
+      data: {eliminar:elementos},
+      success: function (result) {
+        $("#confirmarDelColabModal").modal("hide");
+        if (result['error'] == false) {
+          $('#colabsTbl').DataTable().ajax.reload();
+          document.getElementById("mensajes").innerHTML = "<div class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i>Bien!</h5>Se han eliminado colaboradores con &eacute;xito.</div>";
+        } else {
+          document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>"+result['descripcion']+"</div>";
+        }
+      },
+      error: function (error) {
+        document.getElementById("mensajes").innerHTML = "<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><h5><i class='icon fas fa-exclamation-triangle'></i> Error!</h5>Se ha presentado un error, favor de intentarlo mas tarde.</div>";
+      }
+    });
 }
 
 </script>

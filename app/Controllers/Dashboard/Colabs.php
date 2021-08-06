@@ -6,6 +6,7 @@ use App\Models\ColabsModel;
 use App\Models\SolicitudesModel;
 use App\Models\EstadosModel;
 use App\Models\TipoUsuariosModel;
+use App\Models\UsuariosModel;
 use App\Libraries\ControlProyectosLib; //Libreria personalizada
 
 class Colabs extends BaseController
@@ -139,10 +140,13 @@ class Colabs extends BaseController
     {
         $solicitudes = $_POST['solicitudes'];
         $model = new SolicitudesModel();
+        $usuario = new UsuariosModel();
         foreach ($solicitudes as $s) {
             $solicitud = $model->checkSolicitudValida($s,$_SESSION['cmpnId']);
+            $usrid = $usuario->getUsuarioxCampo('correo_usuario',$solicitud[0]['correo_sol'],'idUsuarios');
             if ($solicitud) {
                 $colab = [
+                    'idColaboradores' => $usrid[0]['idUsuarios'],
                     'nombre_colab' => $solicitud[0]['nombre_sol'],
                     'apellido_colab' => $solicitud[0]['apellido_sol'],
                     'EmpresaId' => $_SESSION['cmpnId'],
@@ -190,6 +194,38 @@ class Colabs extends BaseController
                     'error' => true,
                     'descripcion' => 'Ha ocurrido un error al eliminar la solicitud, favor de intentar m&aacute;s tarde.'
                 ]; 
+            }
+        }
+        echo json_encode($data);
+    }
+
+    public function eliminarColaborador()
+    {
+        $colabs = $_POST['eliminar'];
+        $model = new ColabsModel();
+        $admin = $model->getColabxCampo('idColaboradores',$_SESSION['idUsr'],'TipoUsuarios_idTipoUsuarios');
+        foreach ($colabs as $c) {
+            $campo = $model->getColabxCampo('idColaboradores',$c,'TipoUsuarios_idTipoUsuarios');
+            if ($c == $_SESSION['idUsr']) {
+                $data = [
+                    'error' => true,
+                    'descripcion' => 'Se intenta eliminar el colaborador que est&aacute; usando esta sesi&oacute;n, favor de verificar.'
+                ]; 
+            }  elseif ($campo[0]['TipoUsuarios_idTipoUsuarios'] == 1 &&  $admin[0]['TipoUsuarios_idTipoUsuarios'] == 2){
+                $data = [
+                    'error' => true,
+                    'descripcion' => 'Se est&aacute; intentando eliminar a un dueño de cuenta desde un usuario Administrador, solo los dueños de cuenta pueden eliminarse entre si. Favor de verificar.'
+                ]; 
+            } else {
+                $datos = [
+                    'Estados_idEstados' => 4 
+                ];
+                if ($model->updateColabxId($c,$datos))
+                {
+                    $data = [
+                        'error' => false
+                    ];
+                }
             }
         }
         echo json_encode($data);

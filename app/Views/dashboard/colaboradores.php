@@ -246,3 +246,28 @@
         <!-- /.modal-dialog -->
   </div>
       <!-- CONFIRMACION ELIMINAR SOLICITUD MODAL -->
+
+     <!-- CONFIRMACION ELIMINAR SOLICITUD MODAL -->
+     <div class="modal fade" id="confirmarDelColabModal">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Eliminar Colaborador</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <p id="eliminarNum"></p>
+                <p>Esta acci&oacute;n har&aacute; que el colaborador no pueda trabajar m&aacute;s en los proyectos y no tenga acceso a la informaci&oacute;n de tu empresa.</p><p> Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-danger" onclick="eliminarColab();">Eliminar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+  </div>
+      <!-- CONFIRMACION ELIMINAR SOLICITUD MODAL -->

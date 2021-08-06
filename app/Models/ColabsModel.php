@@ -7,7 +7,15 @@ class ColabsModel extends  Model {
     protected $table = 'Colaboradores';
     protected $primaryKey = 'idColaboradores';
     protected $returnType = 'array';
-    protected $allowedFields = ['nombre_colab','apellido_colab','EmpresaId','correo_colab','Estados_idEstados','activado','ultimo_cambio','TipoUsuarios_idTipoUsuarios'];
+    protected $allowedFields = ['idColaboradores','nombre_colab','apellido_colab','EmpresaId','correo_colab','Estados_idEstados','activado','ultimo_cambio','TipoUsuarios_idTipoUsuarios'];
+
+    public function getColabxCampo($campo, $valorcampo, $devolver)
+    {
+        return $this->asArray()
+                    ->select($devolver)
+                    ->where([$campo=>$valorcampo])
+                    ->find();
+    }
 
     public function getColabInfo()
     {
@@ -49,4 +57,5 @@ class ColabsModel extends  Model {
             //throw new \CodeIgniter\Database\Exceptions\DatabaseException();
         }
     }
+
 }
